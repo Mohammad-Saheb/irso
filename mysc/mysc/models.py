@@ -25,10 +25,10 @@ class MusicDB(DeclarativeBase):
 
     id = Column(Integer, primary_key=True)
     src_url=Column('src_url',String(500))
-    song_full_name=Column('song_full_name',String(200))
-    artist_name=Column('artist_name',String(100))
-    song_name=Column('song_name',String(100))
-    album=Column('song_name',String(100))
+    song_full_name=Column('song_full_name',String(300))
+    artist_name=Column('artist_name',String(300))
+    song_name=Column('song_name',String(400))
+    album=Column('album',String(300))
     hq_mp3_file=Column('hq_mp3_file',String(500))
     hq_mp3_file_id=Column('hq_mp3_file_id',String(500))
 
@@ -46,8 +46,9 @@ class MusicDB(DeclarativeBase):
     like=Column('like',Integer)
     dislike=Column('dislike',Integer)
     rating=Column('rating',Integer)
-    lyrics=Column('lq_cover_file_id',String(5000))
+    lyrics=Column('lyrics',String(5000))
     source=Column('source',String(100))
+
 
 
 

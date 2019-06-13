@@ -12,6 +12,7 @@ import os
 import telegram
 import re
 from subprocess import call
+#from libs.tag import add_details,add_albumart
 from .libs.tag import add_details,add_albumart
 
 #class MyscPipeline(object):
@@ -59,8 +60,8 @@ class MyscPipeline(object):
         musicdb.lyrics=item["lyrics"]=''
         musicdb.rating=item["rating"]=0
         musicdb.album=item["album"]=''
-        #music=session.query(MusicDB).filter_by(song_full_name=item["song_full_name"]).first()
-        #if music is not None: return
+        music=session.query(MusicDB).filter_by(song_full_name=item["song_full_name"]).first()
+        if music is not None: return
 
         save_cover_name=item["song_full_name"]+'(@IranSong)' + '.jpg'
         save_song_name=re.sub(u'[\W_]+', u'_',item["song_full_name"])+'(@IranSong)' + '.mp3'
@@ -73,7 +74,7 @@ class MyscPipeline(object):
                 song.write(response.content)
 
             #Add tags
-            add_details(save_song_name,item['song_name'],item['artist'],item['album'],item['lyrics'])
+            add_details(save_song_name,item['song_name']+'(@IranSong)',item['artist_name'],item['album'],item['lyrics'])
             add_albumart(item["lq_cover_file"],save_song_name)
 
         print('converting')
@@ -94,7 +95,7 @@ class MyscPipeline(object):
                                       voice=open(save_song_preview_name, 'rb'),
                                       duration=30, caption=ad)
         v_hq_mp3_file_id=bot.sendAudio(chat_id='@music4likes', audio=open(save_song_name, 'rb'),
-                                                    performer=item['artist'] + '(@IranSong)',
+                                                    performer=item['artist_name'] + '(@IranSong)',
                                                     title=item['song_name'] + '(@Music4Like)',
                                                     caption=ad
                                                     )['audio']['file_id']
