@@ -22,7 +22,12 @@ class AloonakSpider(scrapy.Spider):
         item["song_full_name"]=response.css('.scroll-bar a.relate-box-a::attr(title)').extract_first().strip()
         item["artist_name"] = response.css('p.singer-title a::text').extract_first().strip()
         item["song_name"] = response.css('p.track-title::text').extract_first().replace("-", "").strip()
-        item["producers"]=re.sub('<br\s*?>', '\n', response.css('div.producers::text').extract_first()).strip()
+        try:
+            item["producers"]=re.sub('<br\s*?>', '\n', response.css('div.producers::text').extract_first()).strip()
+        except Exception as e:
+            self.log(e)
+            item["producers"] = ''
+            pass
         item["hq_mp3_file"] = response.css('a[field=link320]::attr(href)').extract_first().strip()
         item["hq_cover_file"] = response.css('img.post-thumbnail::attr(src)').extract_first().strip()
         item["lq_mp3_file"] = response.css('a[field=link128]::attr(href)').extract_first().strip()
@@ -31,7 +36,12 @@ class AloonakSpider(scrapy.Spider):
         item["download_count"]=0
         item["like"]=response.css('span[field=post_like]::text').extract_first().strip()
         item["dislike"]=0
-        item["lyrics"]=re.sub('<br\s*?>', '\n', response.css('.lyric[field=lyrics]').extract_first()).strip()
+        try:
+            item["lyrics"]=' '.join(response.css('.lyric[field=lyrics]::text').extract()).strip().encode('utf8')
+        except Exception as e:
+            self.log(e)
+            item["lyrics"]=''
+            pass
         if item["lyrics"].find('There is no lyric yet') >0 : item["lyrics"]= ''
         item["rating"]=0
         item["album"]='Unknown'

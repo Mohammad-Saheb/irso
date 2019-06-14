@@ -79,7 +79,7 @@ class MyscPipeline(object):
 
         print('converting')
         print(save_song_name)
-        convert_result=call(["ffmpeg", "-i", save_song_name, "-ss","00:00:35","-to","00:00:65", "-ac", "1", "-map", "0:a",
+        convert_result=call(["ffmpeg", "-i", save_song_name, "-ss","00:00:35","-to","00:01:05", "-ac", "1", "-map", "0:a",
                                "-codec:a", "libopus", "-b:a", "128k", "-vbr", "off", "-ar", "24000",
                                save_song_preview_name, "-y"], stdout=open(os.devnull, 'wb'),
                               stderr=open(os.devnull, 'wb'), stdin=open(os.devnull, 'wb')
@@ -100,6 +100,9 @@ class MyscPipeline(object):
                                                     title=item['song_name'] + '(@IranSong)',
                                                     caption=ad
                                                     )['audio']['file_id']
+        if len(item['lyrics']) > 20 :
+            bot.send_message(chat_id='@music4likes', text=item['lyrics'])
+
         print(v_hq_mp3_file_id)
 
         musicdb.hq_cover_file_id = v_hq_cover_file_id
