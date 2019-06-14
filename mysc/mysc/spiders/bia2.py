@@ -4,14 +4,14 @@ import scrapy
 from ..items import Bia2Item
 class Bia2Spider(scrapy.Spider):
     name = 'bia2'
-    allowed_domains = ['54.225.108.198']
-    start_urls = ['https://54.225.108.198/music/']
+    allowed_domains = ['www.bia2.com']
+    start_urls = ['https://www.bia2.com/music/latest.php']
 
     def parse(self, response):
         download_pages = response.css('a.music_player_page::attr(href)').extract()
         # self.log(download_pages)
-        for download_page in download_pages[1:4]:
-            new_url = 'https://54.225.108.198' + download_page
+        for download_page in download_pages:
+            new_url = 'https://www.bia2.com' + download_page
             # self.log(new_url)
             yield scrapy.Request(new_url, self.parse_download_page)
 

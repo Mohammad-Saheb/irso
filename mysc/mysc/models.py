@@ -41,7 +41,7 @@ class MusicDB(DeclarativeBase):
     lq_cover_file=Column('lq_cover_file',String(500))
     lq_cover_file_id=Column('lq_cover_file_id',String(500))
 
-    play_count=Column('play_count',Integer)
+    play_count=Column('play_count',String(100))
     download_count=Column('download_count',Integer)
     like=Column('like',Integer)
     dislike=Column('dislike',Integer)

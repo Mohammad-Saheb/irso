@@ -87,7 +87,8 @@ class MyscPipeline(object):
         print(convert_result)
 
         v_caption= 'Artist : #' + re.sub(u'[\W_]+', u'_',item['artist_name']) + '\r\n' +\
-                   'Title : ' + item['song_name'] + '\r\n' + ad
+                   'Title : ' + item['song_name'] + '\r\n' +\
+                   'Plays : '+item['play_count']+'\r\n'+ad
         v_hq_cover_file_id=bot.send_photo(chat_id='@music4likes',
                                           caption=v_caption,
                                           photo=item["hq_cover_file"])['photo'][2]['file_id']
@@ -96,7 +97,7 @@ class MyscPipeline(object):
                                       duration=30, caption=ad)
         v_hq_mp3_file_id=bot.sendAudio(chat_id='@music4likes', audio=open(save_song_name, 'rb'),
                                                     performer=item['artist_name'] + '(@IranSong)',
-                                                    title=item['song_name'] + '(@Music4Like)',
+                                                    title=item['song_name'] + '(@IranSong)',
                                                     caption=ad
                                                     )['audio']['file_id']
         print(v_hq_mp3_file_id)
