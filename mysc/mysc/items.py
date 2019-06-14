@@ -38,3 +38,5 @@ class Bia2Item(scrapy.Item):
     lyrics=scrapy.Field()
     rating =scrapy.Field()
     source=scrapy.Field()
+
+    producers=scrapy.Field()

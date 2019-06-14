@@ -2,6 +2,7 @@
 import scrapy
 #from urllib.parse import urljoin
 from ..items import Bia2Item
+
 class Bia2Spider(scrapy.Spider):
     name = 'bia2'
     allowed_domains = ['54.225.108.198']
@@ -33,6 +34,7 @@ class Bia2Spider(scrapy.Spider):
         item["rating"]=0
         item["album"]='Unknown'
         item["source"]='bia2'
+        item["producers"]=''
 
         return item
         # pass
