@@ -12,7 +12,7 @@ class AloonakSpider(scrapy.Spider):
         download_pages = response.css('.box a::attr(href)').extract()
         self.log(download_pages)
 
-        for download_page in download_pages[:2]:
+        for download_page in download_pages:
             yield scrapy.Request(download_page, self.parse_download_page)
 
     def parse_download_page(self, response):

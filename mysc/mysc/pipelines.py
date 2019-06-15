@@ -57,7 +57,7 @@ class MyscPipeline(object):
         musicdb.like = item["like"]
         musicdb.dislike = item["dislike"]
         musicdb.source = item["source"]
-        musicdb.lyrics=item["lyrics"]
+        musicdb.lyrics=item["lyrics"].decode('utf8')
         musicdb.rating=item["rating"]
         musicdb.album=item["album"]
         music=session.query(MusicDB).filter_by(song_full_name=item["song_full_name"]).first()
@@ -101,7 +101,7 @@ class MyscPipeline(object):
                                                     caption=ad
                                                     )['audio']['file_id']
         if len(item['lyrics']) > 20 :
-            bot.send_message(chat_id='@music4likes', text=item['lyrics'])
+            bot.send_message(chat_id='@music4likes', text=item['lyrics']+'\r\n'+'@IranSong')
 
         print(v_hq_mp3_file_id)
 

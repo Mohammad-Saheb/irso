@@ -3,8 +3,8 @@
 
 from mutagen.id3 import ID3, APIC, USLT, _util
 from mutagen.mp3 import EasyMP3
-from urllib.request import urlopen
-#from urllib2 import urlopen
+#from urllib.request import urlopen
+from urllib2 import urlopen
 
 def add_details(file_name, title, artist, album, lyrics=""):
 
