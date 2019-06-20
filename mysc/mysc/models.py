@@ -51,4 +51,7 @@ class MusicDB(DeclarativeBase):
 
     producers=Column('producers',String(1000))
 
+    insta_desc=Column('insta_desc',String(20000))
+    teaser=Column('teaser',String(500))
+
 

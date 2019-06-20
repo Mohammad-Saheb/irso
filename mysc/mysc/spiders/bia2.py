@@ -27,14 +27,16 @@ class Bia2Spider(scrapy.Spider):
         item["lq_mp3_file"] = response.css('li.add_all_without_cover_ol::attr(id)').extract_first().strip()
         item["lq_cover_file"] = response.css('img.artist-round::attr(src)').extract_first().strip()
         item["play_count"]=response.css('#tab1 div div::text').extract_first().strip().split()[0]
-        item["download_count"]=0
-        item["like"]=0
-        item["dislike"]=0
+        item["download_count"]='0'
+        item["like"]='0'
+        item["dislike"]='0'
         item["lyrics"]=''
-        item["rating"]=0
+        item["rating"]='0'
         item["album"]='Unknown'
         item["source"]='bia2'
         item["producers"]=''
+        item["teaser"]=''
+        item["insta_desc"]=''        
 
         return item
         # pass

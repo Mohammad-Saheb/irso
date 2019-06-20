@@ -14,6 +14,7 @@ import re
 from subprocess import call
 #from libs.tag import add_details,add_albumart
 from .libs.tag import add_details,add_albumart
+import urllib
 
 #class MyscPipeline(object):
     #def process_item(self, item, spider):
@@ -48,10 +49,10 @@ class MyscPipeline(object):
         musicdb.song_full_name =item["song_full_name"]
         musicdb.artist_name = item["artist_name"]
         musicdb.song_name = item["song_name"]
-        musicdb.hq_mp3_file = item["hq_mp3_file"]
-        musicdb.hq_cover_file = item["hq_cover_file"]
-        musicdb.lq_mp3_file = item["lq_mp3_file"]
-        musicdb.lq_cover_file = item["lq_cover_file"]
+        musicdb.hq_mp3_file = urllib.quote(item["hq_mp3_file"])
+        musicdb.hq_cover_file = urllib.quote(item["hq_cover_file"])
+        musicdb.lq_mp3_file = urllib.quote(item["lq_mp3_file"])
+        musicdb.lq_cover_file = urllib.quote(item["lq_cover_file"])
         musicdb.play_count = item["play_count"]
         musicdb.download_count = item["download_count"]
         musicdb.like = item["like"]
@@ -60,7 +61,10 @@ class MyscPipeline(object):
         musicdb.lyrics=item["lyrics"].decode('utf8')
         musicdb.rating=item["rating"]
         musicdb.album=item["album"]
-        music=session.query(MusicDB).filter_by(song_full_name=item["song_full_name"]).first()
+        musicdb.insta_desc=item["insta_desc"].decode('utf8')
+        musicdb.teaser=urllib.quote(item["teaser"])
+
+        music=session.query(MusicDB).filter_by(src_url=item["src_url"]).first()
         if music is not None: return
 
         save_cover_name=item["song_full_name"]+'(@IranSong)' + '.jpg'
@@ -74,11 +78,13 @@ class MyscPipeline(object):
                 song.write(response.content)
 
             #Add tags
-            add_details(save_song_name,item['song_name']+'(@IranSong)',item['artist_name'],item['album'],item['lyrics'])
+            add_details(save_song_name,item['song_name']+'(@IranSong)',item['artist_name'],item['album'],'@IranSong')#item['lyrics'])
             add_albumart(item["lq_cover_file"],save_song_name)
 
         print('converting')
         print(save_song_name)
+        print(save_song_preview_name)
+        #todo:Check save_song_name length 
         convert_result=call(["ffmpeg", "-i", save_song_name, "-ss","00:00:35","-to","00:01:05", "-ac", "1", "-map", "0:a",
                                "-codec:a", "libopus", "-b:a", "128k", "-vbr", "off", "-ar", "24000",
                                save_song_preview_name, "-y"], stdout=open(os.devnull, 'wb'),
@@ -87,8 +93,11 @@ class MyscPipeline(object):
         print(convert_result)
 
         v_caption= 'Artist : #' + re.sub(u'[\W_]+', u'_',item['artist_name']) + '\r\n' +\
-                   'Title : ' + item['song_name'] + '\r\n' +\
-                   'Plays : '+item['play_count']+'\r\n'+ad
+                   'Title : '  + item['song_name'] + '\r\n' +\
+                   'Plays : '  + item['play_count']+'\r\n'+\
+                   'Like : '   + item['like']+''+'\r\n'+\
+                   'Source : ' + item['source']+'\r\n'+\
+                   ad
         v_hq_cover_file_id=bot.send_photo(chat_id='@music4likes',
                                           caption=v_caption,
                                           photo=item["hq_cover_file"])['photo'][2]['file_id']
@@ -102,6 +111,8 @@ class MyscPipeline(object):
                                                     )['audio']['file_id']
         if len(item['lyrics']) > 20 :
             bot.send_message(chat_id='@music4likes', text=item['lyrics']+'\r\n'+'@IranSong')
+            bot.send_message(chat_id='@music4likes', text=item['insta_desc']+'\r\n'+item['teaser']+'@IranSong')
+
 
         print(v_hq_mp3_file_id)
 

@@ -33,9 +33,9 @@ class AloonakSpider(scrapy.Spider):
         item["lq_mp3_file"] = response.css('a[field=link128]::attr(href)').extract_first().strip()
         item["lq_cover_file"] = ''
         item["play_count"]=response.css('span[field=post_views]::text').extract_first().strip()
-        item["download_count"]=0
+        item["download_count"]='0'
         item["like"]=response.css('span[field=post_like]::text').extract_first().strip()
-        item["dislike"]=0
+        item["dislike"]='0'
         try:
             item["lyrics"]=' '.join(response.css('.lyric[field=lyrics]::text').extract()).strip().encode('utf8')
         except Exception as e:
@@ -43,9 +43,11 @@ class AloonakSpider(scrapy.Spider):
             item["lyrics"]=''
             pass
         if item["lyrics"].find('There is no lyric yet') >0 : item["lyrics"]= ''
-        item["rating"]=0
+        item["rating"]='0'
         item["album"]='Unknown'
         item["source"]='aloonak'
+        item["teaser"]=''
+        item["insta_desc"]=''        
 
         return item
         # pass

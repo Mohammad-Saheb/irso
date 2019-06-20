@@ -40,3 +40,7 @@ class Bia2Item(scrapy.Item):
     source=scrapy.Field()
 
     producers=scrapy.Field()
+
+    insta_desc=scrapy.Field()
+    teaser=scrapy.Field()
+	
