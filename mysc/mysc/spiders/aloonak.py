@@ -23,7 +23,8 @@ class AloonakSpider(scrapy.Spider):
         item["artist_name"] = response.css('p.singer-title a::text').extract_first().strip()
         item["song_name"] = response.css('p.track-title::text').extract_first().replace("-", "").strip()
         try:
-            item["producers"]=re.sub('<br\s*?>', '\n', response.css('div.producers::text').extract_first()).strip()
+            item["producers"]=''.join(response.css('div.producers::text').extract()).strip()
+#re.sub('<br\s*?>', '\n', response.css('div.producers::text').extract_first()).strip()
         except Exception as e:
             self.log(e)
             item["producers"] = ''

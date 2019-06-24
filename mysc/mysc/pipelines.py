@@ -63,6 +63,7 @@ class MyscPipeline(object):
         musicdb.album=item["album"]
         musicdb.insta_desc=item["insta_desc"].decode('utf8')
         musicdb.teaser=urllib.quote(item["teaser"])
+        musicdb.teaser=urllib.quote(item["producers"])
 
         music=session.query(MusicDB).filter_by(src_url=item["src_url"]).first()
         if music is not None: return
@@ -110,8 +111,13 @@ class MyscPipeline(object):
                                                     caption=ad
                                                     )['audio']['file_id']
         if len(item['lyrics']) > 20 :
-            bot.send_message(chat_id='@music4likes', text=item['lyrics']+'\r\n'+'@IranSong')
-            bot.send_message(chat_id='@music4likes', text=item['insta_desc']+'\r\n'+item['teaser']+'@IranSong')
+            bot.send_message(chat_id='@music4likes', text='Lyrics : '+'\r\n'+item['lyrics']+'\r\n'+'@IranSong')
+            
+        if len(item['insta_desc']) > 0 :
+            bot.send_message(chat_id='@music4likes', text='Instagram : '+'\r\n'+item['insta_desc']+'\r\n'+item['teaser']+'@IranSong')
+            
+        if len(item['producers']) > 0 :
+            bot.send_message(chat_id='@music4likes', text='Producers : '+'\r\n'+item['producers']+'\r\n'+'@IranSong')
 
 
         print(v_hq_mp3_file_id)
