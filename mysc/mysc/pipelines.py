@@ -64,10 +64,12 @@ class MyscPipeline(object):
         musicdb.insta_desc=item["insta_desc"].decode('utf8')
         musicdb.teaser=urllib.quote(item["teaser"])
         musicdb.teaser=urllib.quote(item["producers"])
-
+        
         music=session.query(MusicDB).filter_by(src_url=item["src_url"]).first()
         if music is not None: return
-
+        
+        bot.send_message(chat_id='@music4likes', text=item['src_url'])
+        
         save_cover_name=item["song_full_name"]+'(@IranSong)' + '.jpg'
         save_song_name=re.sub(u'[\W_]+', u'_',item["song_full_name"])+'(@IranSong)' + '.mp3'
         save_song_preview_name = re.sub(u'[\W_]+', u'_', item["song_full_name"]) + '(@IranSong)' + '.ogg'
