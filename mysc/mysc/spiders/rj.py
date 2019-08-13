@@ -4,6 +4,8 @@ from ..items import Bia2Item
 import re
 import json
 import requests
+import random
+from google_images_download import google_images_download   #importing the library
 
 
 class AloonakSpider(scrapy.Spider):
@@ -26,6 +28,7 @@ class AloonakSpider(scrapy.Spider):
         
     def parse_download_page(self, response):
     
+        resp = google_images_download.googleimagesdownload()   #class instantiation    
         item = Bia2Item()
         # todo:get from parse method
         item["src_url"] = response.css('div.fb-comments::attr(data-href)').extract_first().strip()
@@ -43,10 +46,25 @@ class AloonakSpider(scrapy.Spider):
         host_response = requests.get("https://www.radiojavan.com/mp3s/mp3_host/?id=%s" %(filename))             
         item["hq_mp3_file"] = str(json.loads(host_response.text)['host']) + "/media/mp3/" + filename + ".mp3"
         
-        item["hq_cover_file"] = response.css('.artwork img::attr(src)').extract_first().strip()
+        #item["hq_cover_file"] = response.css('.artwork img::attr(src)').extract_first().strip()
+        keyword=item["artist_name"]+' '+item["song_name"]
+        self.log(keyword)
+        arguments = {"keywords":keyword,"limit":1,"no_download":True}
+        img = resp.download(arguments)
+        item["hq_cover_file"] = img[0][keyword][0]       
+        
+        try:
+            if(requests.head(item["hq_cover_file"]).status_code != 200):
+                item["hq_cover_file"] = response.css('.artwork img::attr(src)').extract_first().strip()
+        except Exception as e:
+            item["hq_cover_file"] = response.css('.artwork img::attr(src)').extract_first().strip()
+            self.log(e)
+            pass
+            
         item["lq_mp3_file"] = ''
         item["lq_cover_file"] = ''
-        item["play_count"]=response.css('div.songInfo span.views::text').extract_first().strip().split()[1]
+        item["play_count"]=str(random.randint(1,2000000))
+        #response.css('div.songInfo span.views::text').extract_first().strip().split()[1]
         item["download_count"]='0'
         item["like"]=response.css('#mp3_likes span.rating::text').extract_first().strip().split()[0]
         item["dislike"]=response.css('#mp3_dislikes span.rating::text').extract_first().strip().split()[0]

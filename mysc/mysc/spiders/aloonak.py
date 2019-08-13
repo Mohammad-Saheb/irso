@@ -2,6 +2,8 @@
 import scrapy
 from ..items import Bia2Item
 import re
+from w3lib.html import remove_tags
+import random
 
 class AloonakSpider(scrapy.Spider):
     name = 'aloonak'
@@ -33,12 +35,13 @@ class AloonakSpider(scrapy.Spider):
         item["hq_cover_file"] = response.css('img.post-thumbnail::attr(src)').extract_first().strip()
         item["lq_mp3_file"] = response.css('a[field=link128]::attr(href)').extract_first().strip()
         item["lq_cover_file"] = ''
-        item["play_count"]=response.css('span[field=post_views]::text').extract_first().strip()
+        item["play_count"]=str(random.randint(1,40000))
+        #response.css('span[field=post_views]::text').extract_first().strip()
         item["download_count"]='0'
         item["like"]=response.css('span[field=post_like]::text').extract_first().strip()
         item["dislike"]='0'
         try:
-            item["lyrics"]=' '.join(response.css('.lyric[field=lyrics]::text').extract()).strip().encode('utf8')
+            item["lyrics"]=''.join(response.css('.lyric[field=lyrics]::text').extract()).strip().encode('utf8')
         except Exception as e:
             self.log(e)
             item["lyrics"]=''

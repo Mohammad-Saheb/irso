@@ -46,12 +46,11 @@ class MusicDB(DeclarativeBase):
     like=Column('like',String(50))
     dislike=Column('dislike',String(50))
     rating=Column('rating',String(50))
-    lyrics=Column('lyrics',String(5000))
+    lyrics=Column('lyrics',String(65000))
     source=Column('source',String(100))
 
     producers=Column('producers',String(1000))
 
     insta_desc=Column('insta_desc',String(20000))
     teaser=Column('teaser',String(500))
-
 

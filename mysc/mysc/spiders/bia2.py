@@ -2,6 +2,8 @@
 import scrapy
 #from urllib.parse import urljoin
 from ..items import Bia2Item
+import random
+
 
 class Bia2Spider(scrapy.Spider):
     name = 'bia2'
@@ -26,7 +28,8 @@ class Bia2Spider(scrapy.Spider):
         item["hq_cover_file"] = response.css('li.add_all_without_cover_ol::attr(cover_src)').extract_first().strip()
         item["lq_mp3_file"] = response.css('li.add_all_without_cover_ol::attr(id)').extract_first().strip()
         item["lq_cover_file"] = response.css('img.artist-round::attr(src)').extract_first().strip()
-        item["play_count"]=response.css('#tab1 div div::text').extract_first().strip().split()[0]
+        item["play_count"]=str(random.randint(1,1000000))
+        #response.css('#tab1 div div::text').extract_first().strip().split()[0]
         item["download_count"]='0'
         item["like"]='0'
         item["dislike"]='0'
